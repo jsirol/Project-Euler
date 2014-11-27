@@ -18,5 +18,5 @@ function largestFactor(x)
                         end
                 end
         end
-        return "not found, prkl!"
+        return "not found!"
 end
