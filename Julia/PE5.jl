@@ -1,4 +1,5 @@
 # find the smallest positive number that is evenly divisible with 1:20
+
 evenlyDivisible = function()
 	Int not_found = 1
 	Int number = 1
@@ -17,3 +18,5 @@ evenlyDivisible = function()
 	end
 	number
 end
+
+println(evenlyDivisible())

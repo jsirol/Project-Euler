@@ -1,4 +1,5 @@
-# find the largest palindrome made from the product ot two 3-digit numbers
+# find the largest palindrome made from the product of two 3-digit numbers
+
 largestPalindrome = function()
 	largest = -1 # not found
 	for ii=100:999
@@ -11,3 +12,5 @@ largestPalindrome = function()
 	end
 	return largest
 end
+
+println(largestPalindrome())

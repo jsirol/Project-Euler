@@ -10,3 +10,5 @@ differ = function()
 	end
 	return squareSum*squareSum - sumSquare
 end
+
+println(differ())
