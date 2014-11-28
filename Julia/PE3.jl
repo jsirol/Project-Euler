@@ -1,3 +1,4 @@
+# finds the largest prime factor of 600851475143
 function isPrime(x)
         for i=2:sqrt(x)
                 if(x%i==0)

@@ -1,6 +1,5 @@
 # find the smallest positive number that is evenly divisible with 1:20
-
-evenlyDivisible = function()
+function evenlyDivisible()
 	not_found = true
 	number = 1
 	while(not_found)
@@ -18,5 +17,4 @@ evenlyDivisible = function()
 	end
 	return number
 end
-
 println(evenlyDivisible())

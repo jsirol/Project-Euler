@@ -1,6 +1,5 @@
 # By considering the terms in the Fibonacci sequence whose values
 # do not exceed four million, finds the sum of the even-valued terms.
-
 function sumOfEvenTerms()
 	Sum = 2 # start /w 2 
 	curr = 2
@@ -16,5 +15,4 @@ function sumOfEvenTerms()
 	end
 	return Sum 
 end
-
 println(sumOfEvenTerms())

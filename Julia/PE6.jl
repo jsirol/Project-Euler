@@ -1,7 +1,6 @@
 # Find the difference between the sum of the squares of 
 # the first one hundred natural numbers and the square of the sum.
-
-differ = function()
+function differ()
 	sumSquare = 0
 	squareSum = 0
 	for i=1:100
@@ -10,5 +9,4 @@ differ = function()
 	end
 	return squareSum*squareSum - sumSquare
 end
-
 println(differ())
