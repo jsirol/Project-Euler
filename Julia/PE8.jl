@@ -28,7 +28,6 @@ for i in 1:(length(x)-12)
 	if(product > largestProd)
 		largestProd = product
 		digs = x[i:(i+12)]
-		index = i
 	end
 end
 println("The digits are: ", digs)
