@@ -1,1 +1,1 @@
-Misc Project-Euler problems solved
+Misc Project-Euler problems solved for fun
