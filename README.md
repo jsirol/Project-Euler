@@ -1,7 +1,7 @@
-# Misc Project-Euler problems solved for fun.
+# Misc Project-Euler problems solved for fun
 
 ## About
-Keeping programming skills fresh with different languages :)
+Keeping programming skills fresh and learning something new/gaining experience from different languages.
 
 ## Instructions
 
