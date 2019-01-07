@@ -8,7 +8,7 @@ object EulerUtils {
   def factorial(n: Int): BigInt = {
     @tailrec
     def factorial_iter(acc: BigInt, n: Int): BigInt = {
-      if (n == 1) acc else  factorial_iter(n * acc, n - 1)
+      if (n == 1) acc else factorial_iter(n * acc, n - 1)
     }
     if (n < 0) throw new IllegalArgumentException
     else if (n == 0) 1
@@ -21,6 +21,10 @@ object EulerUtils {
     (BigInt(k+1) to BigInt(n)).product / factorial(k)
   }
 
+  def divisors(n: Long): Set[Long] = {
+    (1L to n / 2).filter(n % _ == 0).toSet
+  }
+
   // test if a number is prime
   def isPrime(n: Long): Boolean = {
     if (n == 2) true
@@ -30,7 +34,7 @@ object EulerUtils {
   }
 
   // returns a set of prime factors of n
-  def primes(n: Long): Set[Long] = {
+  def primeFactors(n: Long): Set[Long] = {
     @tailrec
     def primesIter(factors: Set[Long], n: Long, current: Long): Set[Long] = {
       if (n % current == 0) primesIter(factors + current, n / current.longValue(), current)
