@@ -11,7 +11,7 @@ import EulerUtils.factorial
 
 object PE_020 extends App {
   val t0 = System.nanoTime()
-  val factorialThousand = factorial(100).toString()
-  println("Result: " + factorialThousand.split("").foldLeft(0)((digitSum, s) => digitSum + s.toInt))
+  val factorialHundred = factorial(100).toString()
+  println("Result: " + factorialHundred.split("").foldLeft(0)((digitSum, s) => digitSum + s.toInt))
   println("Elapsed time: " + (System.nanoTime() - t0) / 1e9 + "s")
 }
