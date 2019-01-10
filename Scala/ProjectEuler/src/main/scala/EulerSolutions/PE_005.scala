@@ -12,13 +12,13 @@ object PE_005 extends App {
 
     @tailrec
     def evenlyDivisibleIter(n: Int): Int = {
-      if ((bySmallest to byLargest).forall(x => n % x == 0)) n
-      else evenlyDivisibleIter(n+1)
+      if (n > 0 && (bySmallest to byLargest).forall(x => n % x == 0)) n
+      else evenlyDivisibleIter(n+byLargest)
     }
     evenlyDivisibleIter(n)
   }
 
   val t0 = System.nanoTime()
-  print("Result: " + evenlyDivisible(1, 2, 20))
+  print("Result: " + evenlyDivisible(0, 2, 20))
   println("\nElapsed time: " + (System.nanoTime() - t0) / 1e9 + "s")
 }

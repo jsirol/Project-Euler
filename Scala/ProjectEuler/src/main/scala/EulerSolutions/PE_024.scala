@@ -19,7 +19,7 @@ object PE_024 extends App {
     if (remainder == 0)
       solution ::: left
     else {
-      val permutations = factorial(k).intValue()
+      val permutations = factorial(k).toInt
       val times = remainder / permutations
       if (times * permutations == remainder) {
         // need to reverse the left list, because if we are at solution, the rest has to be in "last" lexicographic order
@@ -32,6 +32,6 @@ object PE_024 extends App {
   }
 
 
-  println("Result: " + check(target, 9, List(), List.range(0, 10, 1))) //
+  println("Result: " + check(target, 9, List(), List.range(0, 10, 1))) // List(2, 7, 8, 3, 9, 1, 5, 4, 6, 0)
   println("Elapsed time: " + (System.nanoTime() - t0) / 1e9 + "s")
 }

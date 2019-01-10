@@ -23,6 +23,6 @@ object PE_007 extends App {
   }
 
   val t0 = System.nanoTime()
-  print("Result: " + nthPrime(10001))
+  print("Result: " + nthPrime(10001)) // 104743
   println("\nElapsed time: " + (System.nanoTime() - t0) / 1e9 + "s")
 }
