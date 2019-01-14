@@ -31,7 +31,7 @@ object PE_025 extends App {
     @tailrec
     def fiboIter(previous: BigInt, previous2: BigInt, currentIndex: Int): Int = {
       val current = previous + previous2
-      if (current.toString().split("").length == numDigits)
+      if (current.toString().length == numDigits)
         currentIndex
       else
         fiboIter(current, previous, currentIndex+1)

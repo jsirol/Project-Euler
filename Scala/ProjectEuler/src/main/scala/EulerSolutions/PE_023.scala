@@ -17,13 +17,13 @@ is less than this limit.
 Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
 */
 
-import EulerUtils.divisors
+import EulerUtils.{divisors, fastDivisors}
 
 object PE_023 extends App {
   val t0 = System.nanoTime()
 
   val lowerBound = 28123
-  val abundantNumbersBelowLowerBound = (1 to lowerBound).par.filter(x => divisors(x).sum > x).toSet
+  val abundantNumbersBelowLowerBound = (1 to lowerBound).par.filter(x => fastDivisors(x).filter(_ < x).sum > x).toSet
   val sumOfIntegersNotSumOfTwoAbundantNumbers = (1 to lowerBound).
     par.filter(x => !abundantNumbersBelowLowerBound.exists(y => abundantNumbersBelowLowerBound.contains(x - y))).sum
 

@@ -8,7 +8,6 @@ import EulerUtils.primeFactors
 
 object PE_003 extends App {
   val t0 = System.nanoTime()
-  // print(primes(600851475143L)) // Set(71, 839, 1471, 6857)
-  print("Result: " + primeFactors(600851475143L).max)
+  println("Result: " + primeFactors(600851475143L).foldLeft(2L)((m, x) => math.max(m, x._1))) // 6857
   println("\nElapsed time: " + (System.nanoTime() - t0) / 1e9 + "s")
 }
