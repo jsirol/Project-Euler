@@ -74,6 +74,4 @@ object EulerUtils {
     primeFactors(n).foldLeft(1L)((acc, p) => acc * (p._2+1))
   }
 
-
-
 }
