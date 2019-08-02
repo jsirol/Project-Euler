@@ -32,41 +32,99 @@ object EulerUtils {
   }
 
   // faster implementation for large numbers (based on prime factorization)
-  def fastDivisors(n: Long): Set[Long] = {
+  def fastDivisors(n: Long, precomputedPrimesUpToN: Option[Array[Long]] = None): Set[Long] = {
+
     @tailrec
     def divisorsIter(divisors: Set[Long], usable: List[Long]): Set[Long] = {
       if (usable.isEmpty) divisors
       else divisorsIter(Set(usable.head) ++ divisors.map(x => usable.head * x) ++ divisors, usable.tail)
     }
-    //1 :: divisorsIter(List(), primeFactors(n).toList.flatMap(x => (1 to x._2).map(y => math.pow(x._1, y).toLong)))
-    Set(1L) ++ divisorsIter(Set(), primeFactors(n).toList.flatMap(x => List.fill(x._2)(x._1)))
+
+    precomputedPrimesUpToN match {
+      case None => Set(1L) ++ divisorsIter(Set(), primeFactors(n).flatMap(x => List.fill(x._2)(x._1)))
+      case Some(s) => Set(1L) ++ divisorsIter(Set(), primeFactorsWithPrecomputedPrimes(n, s).flatMap(x => List.fill(x._2)(x._1)))
+    }
   }
 
   // test if a number is prime
   def isPrime(n: Long): Boolean = {
-    if (n == 2) true
+    if (n == 1) false
+    else if (n == 2) true
+    else if (n % 2 == 0) false
     else {
-      !(3L to(math.sqrt(n).floor.toLong, 2L)).exists(n % _ == 0)
+      !(3L to (math.sqrt(n).ceil.toLong, 2L)).exists(n % _ == 0)
     }
   }
 
-  // returns a set of prime factors of n
-  def primeFactors(n: Long): Set[(Long, Int)] = {
-
-    def multiplicity(n: Long, p: Long): Int = {
-      (1L to math.floor(math.sqrt(n)).toLong).takeWhile(candidate => n % math.pow(p, candidate) == 0).max.toInt
-    }
+  def fastIsPrime(n: Long): Boolean = {
+    // using wheel factorization with primes 2,3,5 utilized
+    val skipList = List(4, 2, 4, 2, 4, 6, 2, 6) // how many we skip at each iteration
 
     @tailrec
-    def primesIter(factors: Set[(Long, Int)], nRemaining: Long, current: Long): Set[(Long, Int)] = {
-      if (nRemaining % current == 0)
-        primesIter(factors ++ Set((current, multiplicity(n, current))), nRemaining / current.toLong, current)
-      else if (current < nRemaining)
-        primesIter(factors, nRemaining, current+2)
-      else factors
+    def fastIsPrimeIter(nCurrent: Long, skipListIdx: Int): Boolean = {
+      if (nCurrent * nCurrent > n) true
+      else if (n % nCurrent == 0) false
+      else fastIsPrimeIter(nCurrent + skipList(skipListIdx), (skipListIdx + 1) % skipList.length)
     }
-    if (n % 2 == 0) primesIter(Set((2, multiplicity(n, 2))), n / 2, 3)
-    else primesIter(Set(), n, 3)
+
+    if (n == 1) false
+    else if (n == 2 || n == 3 || n == 5) true
+    else if (List(2, 3, 5).exists(n % _ == 0)) false
+    else {
+      fastIsPrimeIter(7, 0)
+    }
+  }
+
+  // returns the multiplicity of divisor d of n, e.g. multiplicity(25, 5) = 2, since 25=5*5
+  // multiplicity(18, 3) = 2, since 18 = 3 * 3 * 2, multiplicity(18, 6) = 1 as 18 = 6*3
+  def multiplicity(n: Long, d: Long): Int = {
+    @tailrec
+    def multiplicityIter(currentN: Long, currentMultiplicity: Int): Int = {
+      if (currentN % d != 0) currentMultiplicity
+      else multiplicityIter(currentN / d, currentMultiplicity+1)
+    }
+    multiplicityIter(n, 0)
+  }
+
+  // returns a set of prime factors of n
+  def primeFactors(n: Long): List[(Long, Int)] = {
+    // using wheel factorization with primes 2,3,5 utilized
+    val skipList = List(4, 2, 4, 2, 4, 6, 2, 6) // how many we skip at each iteration
+
+    @tailrec
+    def primesIter(factors: List[(Long, Int)], nRemaining: Long, current: Long, skipIdx: Int): List[(Long, Int)] = {
+      if (nRemaining == 1) return factors
+
+      val currentMultiplicity = multiplicity(nRemaining, current)
+      if (currentMultiplicity == 0) primesIter(factors, nRemaining, current + skipList(skipIdx), (skipIdx+1) % skipList.length)
+      else {
+        primesIter(factors ++ List((current, currentMultiplicity)),
+          nRemaining / math.pow(current, currentMultiplicity).toLong, current + skipList(skipIdx), (skipIdx+1) % skipList.length)
+      }
+    }
+
+    val baseFactors = List(2L, 3L, 5L).map(d => (d, multiplicity(n, d))).filter(x => x._2 > 0)
+    val nRemaining = baseFactors.foldLeft(n)((x, f) => if (f._2 > 0) x / math.pow(f._1, f._2).toLong else x)
+    primesIter(baseFactors, nRemaining, 7, skipIdx = 0)
+  }
+
+/*   Returns a set of prime factors of n (uses precomputed Array of primes up to n to speed up the factorization).
+      Useful if multiple numbers up to n need to be factored.
+*/
+  def primeFactorsWithPrecomputedPrimes(n: Long, precomputedPrimesUpToN: Array[Long]): List[(Long, Int)] = {
+
+    @tailrec
+    def primesIter(factors: List[(Long, Int)], nRemaining: Long, currentPrimeIdx: Int): List[(Long, Int)] = {
+      if (nRemaining == 1) return factors
+
+      val currentMultiplicity = multiplicity(nRemaining, precomputedPrimesUpToN(currentPrimeIdx))
+      if (currentMultiplicity == 0) primesIter(factors, nRemaining, currentPrimeIdx+1)
+      else {
+        primesIter(factors ++ List((precomputedPrimesUpToN(currentPrimeIdx), currentMultiplicity)),
+          nRemaining / math.pow(precomputedPrimesUpToN(currentPrimeIdx), currentMultiplicity).toLong, currentPrimeIdx+1)
+      }
+    }
+    primesIter(List(), n, 0)
   }
 
   // using formula divisors(n) = prod (a_i+1), where a_i is the multiplicity of the ith prime factor of n
